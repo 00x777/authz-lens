@@ -1,0 +1,29 @@
+# Drop this into .github/workflows/authz.yml of a FastAPI project.
+# Findings appear inline on pull requests through GitHub code scanning.
+name: authz-lens
+
+on:
+  pull_request:
+
+permissions:
+  contents: read
+  security-events: write
+
+jobs:
+  scan:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - run: pip install git+https://github.com/00x777/authz-lens
+      # Add project-specific tenancy columns with --scope-field (repeatable).
+      - run: authz-lens app/ --scope-field practice_id --sarif authz.sarif
+      # Optional: let an LLM drop false positives before they reach reviewers.
+      # - run: authz-lens app/ --llm --sarif authz.sarif
+      #   env:
+      #     ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+      - uses: github/codeql-action/upload-sarif@v3
+        with:
+          sarif_file: authz.sarif

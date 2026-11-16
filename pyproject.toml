@@ -1,0 +1,31 @@
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "authz-lens"
+version = "0.1.0"
+description = "Find missing object-level authorization (IDOR/BOLA) in FastAPI + SQLAlchemy apps, with optional LLM triage."
+readme = "README.md"
+requires-python = ">=3.10"
+license = { text = "MIT" }
+authors = [{ name = "Jaeha (James) Yoo" }]
+keywords = ["security", "fastapi", "sqlalchemy", "idor", "bola", "sast", "llm"]
+classifiers = [
+  "Programming Language :: Python :: 3",
+  "Topic :: Security",
+  "License :: OSI Approved :: MIT License",
+]
+dependencies = []
+
+[project.optional-dependencies]
+dev = ["pytest>=7"]
+
+[project.scripts]
+authz-lens = "authz_lens.cli:main"
+
+[tool.setuptools.packages.find]
+include = ["authz_lens*"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]

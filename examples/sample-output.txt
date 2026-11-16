@@ -1,0 +1,14 @@
+tests/fixtures/vuln_app.py:15: [MEDIUM] CWE-639 object-level-authz
+    GET /notes/{note_id} loads Note by path parameter 'note_id' but never scopes it to the caller (no owner/tenant filter or ownership check). Possible IDOR/BOLA.
+    > note = db.get(Note, note_id)
+tests/fixtures/vuln_app.py:24: [HIGH] CWE-639 object-level-authz
+    DELETE /invoices/{invoice_id} loads Invoice by path parameter 'invoice_id' but never scopes it to the caller (no owner/tenant filter or ownership check). Possible IDOR/BOLA.
+    > inv = db.query(Invoice).filter(Invoice.id == invoice_id).first()
+tests/fixtures/vuln_app.py:33: [HIGH] CWE-639 object-level-authz
+    PUT /categories/{slug} loads Category by path parameter 'group_id, slug' but never scopes it to the caller (no owner/tenant filter or ownership check). Possible IDOR/BOLA.
+    > stmt = select(Category).where(Category.slug == slug, Category.group_id == group_id)
+tests/fixtures/vuln_app.py:42: [MEDIUM] CWE-306 missing-authentication
+    GET /public/notes/{note_id} loads Note by path parameter 'note_id' with no authentication dependency.
+    > return db.get(Note, note_id)
+
+4 finding(s)
